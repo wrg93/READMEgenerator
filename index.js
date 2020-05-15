@@ -38,10 +38,8 @@ function promptUser(){
       name: "license",
       choices: [
           "MIT",
-          "APACHE 2.0",
-          "GPL 3.0",
-          "BSD 3",
-          "None"
+          "GPL3",
+          "AGPL"
       ]
     },
     {
@@ -65,74 +63,86 @@ function promptUser(){
        message:"What does the user need to know about contributing to the repo?"
     }
   ]);
+}
+
+
+
+function generateMarkdown(data) {
+  if (data.license == "MIT"){
+    data.badge = "[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)"
+  }else if (data.license == "GPL3"){
+    data.badge = "[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)"
+  }else if (data.license == "AGPL"){
+  "[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)"
   }
+  
+  return `
+# myproject
+${data.badge}${data.URL}
 
-    function generateMarkdown(data) {
-      return `
-      # myproject
-      ${data.title}
-      
-      ${data.URL}
+${data.title}
     
-      ## Description
-      ${data.description}
+## Description
+${data.description}
     
-      #Table of Contents
+#Table of Contents
     
-      -[Installation] (#installation)
+-[Installation] (#installation)
     
-      -[Usage](#usage)
+-[Usage](#usage)
     
-      -[License](#license)
+-[License](#license)
     
-      -[Questions](#questions)
+-[Questions](#questions)
     
-      ## Installation
+## Installation
     
-      To install necessary dependencies, run the following command:
-      ...
-      ${data.installation}
-      ...
+To install necessary dependencies, run the following command:
+...
+${data.installation}
+...
     
-      ## Usage
+## Usage
     
-      ${data.repo}
+${data.repo}
     
-      ## License
+## License
     
-      This project is licensed under ${data.license}
+This project is licensed under ${data.license}
     
-      ## Contributing
+## Contributing
     
-      ${data.contributions}
+${data.contributions}
     
-      ## Tests
+## Tests
     
-      To run tests, run the following command:
+To run tests, run the following command:
+  
+...
+${data.tests}
+...
     
-      ...
-      ${data.tests}
-      ...
+## Questions
     
-      ## Questions
-    
-      If you have any questions please email me at ${data.email}. 
+If you have any questions please email me at ${data.email}. 
 
-      To view more projects please visit https://github.com/${data.github}.
+To view more projects please visit https://github.com/${data.github}.
     
-      `;
-      }
+`;
+}
 
-      promptUser()
-      .then(function(data) {
-        const markdown = generateMarkdown(data);
+
+
+promptUser()
+  .then(function(data) {
+    const markdown = generateMarkdown(data);
     
-        return writeFileAsync("README.md", markdown);
+      return writeFileAsync("README.md", markdown);
       })
       .then(function() {
-        console.log("Successfully wrote to index.html");
+        console.log("Successfully wrote to README.md");
       })
       .catch(function(err) {
         console.log(err);
-      });
+});
     
