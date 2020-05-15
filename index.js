@@ -70,7 +70,7 @@ function promptUser(){
     function generateMarkdown(data) {
       return `
       # myproject
-      ${data.title} - ${data.title}
+      ${data.title}
       
       ${data.URL}
     
@@ -117,6 +117,8 @@ function promptUser(){
       ## Questions
     
       If you have any questions please email me at ${data.email}. 
+
+      To view more projects please visit https://github.com/${data.github}.
     
       `;
       }
