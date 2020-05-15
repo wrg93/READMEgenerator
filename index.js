@@ -1,23 +1,12 @@
-// const questions = [
-
-// ];
-
-// function writeToFile(fileName, data) {
-// }
-
-// function init() {
-
-// }
-
-// init();
-
-
 
 const inquirer = require("inquirer");
 const fs = require("fs");
 const util = require("util");
 
-inquirer.prompt([
+const writeFileAsync = util.promisify(fs.writeFile);
+
+function promptUser(){
+  return inquirer.prompt([
     {
       type: "input",
       name: "github",
@@ -74,12 +63,74 @@ inquirer.prompt([
        type:"input",
        name:"contributions",
        message:"What does the user need to know about contributing to the repo?"
-    },
-  ]).then(function(data){
-      fs.writeFile("README.md",JSON.stringify(data,null, '\t'), function(err){
-          if (err) {
-              return console.log(err);
-          }
-          console.log("success!");
+    }
+  ]);
+  }
+
+    function generateMarkdown(data) {
+      return `
+      # myproject
+      ${data.title} - ${data.title}
+      
+      ${data.URL}
+    
+      ## Description
+      ${data.description}
+    
+      #Table of Contents
+    
+      -[Installation] (#installation)
+    
+      -[Usage](#usage)
+    
+      -[License](#license)
+    
+      -[Questions](#questions)
+    
+      ## Installation
+    
+      To install necessary dependencies, run the following command:
+      ...
+      ${data.installation}
+      ...
+    
+      ## Usage
+    
+      ${data.repo}
+    
+      ## License
+    
+      This project is licensed under ${data.license}
+    
+      ## Contributing
+    
+      ${data.contributions}
+    
+      ## Tests
+    
+      To run tests, run the following command:
+    
+      ...
+      ${data.tests}
+      ...
+    
+      ## Questions
+    
+      If you have any questions please email me at ${data.email}. 
+    
+      `;
+      }
+
+      promptUser()
+      .then(function(data) {
+        const markdown = generateMarkdown(data);
+    
+        return writeFileAsync("README.md", markdown);
       })
-})
+      .then(function() {
+        console.log("Successfully wrote to index.html");
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+    
