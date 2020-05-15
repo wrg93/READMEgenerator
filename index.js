@@ -10,7 +10,7 @@ function promptUser(){
     {
       type: "input",
       name: "github",
-      message: "What is your GitHub Usernane?"
+      message: "What is your GitHub Username?"
     },
     {
         type:"input",
